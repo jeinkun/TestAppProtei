@@ -22,9 +22,13 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.navArgument
 
 @Composable
 fun AlbumsScreen(albumsVM: AlbumsViewModel = viewModel(), navController: NavController) {
+    LaunchedEffect(true) {
+        albumsVM.getAlbums(navController.currentBackStackEntry?.arguments?.getString("userId")?.toInt())
+    }
     val albumsUiState by albumsVM.uiState.collectAsState()
     Box {
         LazyColumn {

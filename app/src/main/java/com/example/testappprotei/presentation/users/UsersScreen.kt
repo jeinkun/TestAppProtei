@@ -23,6 +23,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.testappprotei.presentation.navigation.ALBUMS_SCREEN_ROUTE
+import com.example.testappprotei.presentation.navigation.ALBUMS_SCREEN_WITHOUT_ARG_ROUTE
 
 @Composable
 fun UsersScreen(usersVM: UsersViewModel = viewModel(), navController: NavController) {
@@ -47,7 +48,7 @@ fun UserCardView(user: User, navController: NavController) {
             .border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(8.dp))
             .background(color = Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
             .clickable(onClick = {
-                navController.navigate(ALBUMS_SCREEN_ROUTE)
+                navController.navigate(ALBUMS_SCREEN_WITHOUT_ARG_ROUTE + user.id)
             })
 
     ) {

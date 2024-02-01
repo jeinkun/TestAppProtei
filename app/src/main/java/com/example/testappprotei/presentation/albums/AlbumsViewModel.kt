@@ -13,21 +13,22 @@ class AlbumsViewModel : BaseViewModel() {
     private val _uiState = MutableStateFlow(AlbumsState())
     val uiState: StateFlow<AlbumsState> = _uiState.asStateFlow()
 
-    init {
-        getAlbums()
-    }
-
-    private fun getAlbums() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = mainInteractor.getUsersAlbums(1)
-            if (response.isSuccessful) {
-                val result = response.body()
-                result?.let {
-                    _uiState.value = _uiState.value.copy(albums = it.toAlbumsState())
+    fun getAlbums(userId: Int?) {
+        if (userId != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val response = mainInteractor.getUsersAlbums(userId)
+                if (response.isSuccessful) {
+                    val result = response.body()
+                    result?.let {
+                        _uiState.value = _uiState.value.copy(albums = it.toAlbumsState())
+                    }
+                } else {
+                    // TODO: add error state
                 }
-            } else {
-                // TODO: add error state
             }
+
+        } else {
+            // TODO: add error state
         }
     }
 }
