@@ -31,7 +31,6 @@ import coil.compose.rememberAsyncImagePainter
 @Composable
 fun PhotosScreen(vm: PhotosViewModel = viewModel(), navController: NavController) {
     LaunchedEffect(true) {
-        val dd = navController.currentBackStackEntry?.arguments?.getString("albumId")?.toInt()
         vm.getPhotosDb(
             navController.currentBackStackEntry?.arguments?.getString("albumId")?.toInt()
         )
