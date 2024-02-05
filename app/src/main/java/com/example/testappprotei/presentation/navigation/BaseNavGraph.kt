@@ -5,11 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.testappprotei.presentation.albums.AlbumsScreen
+import com.example.testappprotei.presentation.photos.PhotosScreen
 import com.example.testappprotei.presentation.users.UsersScreen
 
 const val USERS_SCREEN_ROUTE = "users"
 const val ALBUMS_SCREEN_WITHOUT_ARG_ROUTE = "albums/"
 const val ALBUMS_SCREEN_ROUTE = "albums/{userId}"
+const val PHOTOS_SCREEN_WITHOUT_ARG_ROUTE = "photos/"
+const val PHOTOS_SCREEN_ROUTE = "photos/{albumId}"
 
 @Composable
 fun BaseNavGraph(navController: NavHostController) {
@@ -22,6 +25,9 @@ fun BaseNavGraph(navController: NavHostController) {
         }
         composable(ALBUMS_SCREEN_ROUTE) {
             AlbumsScreen(navController = navController)
+        }
+        composable(PHOTOS_SCREEN_ROUTE) {
+            PhotosScreen(navController = navController)
         }
     }
 }

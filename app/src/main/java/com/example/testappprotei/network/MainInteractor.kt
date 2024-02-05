@@ -6,4 +6,6 @@ class MainInteractor() {
     suspend fun getUsers() = apiRepository.getUsers()
 
     suspend fun getUsersAlbums(userId: Int) = apiRepository.getUserAlbums(userId)
+
+    suspend fun getAlbumsPhoto(albumId: Int) = apiRepository.getAlbumsPhoto(albumId)
 }

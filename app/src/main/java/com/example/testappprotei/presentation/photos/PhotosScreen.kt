@@ -1,6 +1,7 @@
-package com.example.testappprotei.presentation.albums
+package com.example.testappprotei.presentation.photos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -18,24 +19,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.testappprotei.presentation.navigation.PHOTOS_SCREEN_WITHOUT_ARG_ROUTE
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun AlbumsScreen(vm: AlbumsViewModel = viewModel(), navController: NavController) {
+fun PhotosScreen(vm: PhotosViewModel = viewModel(), navController: NavController) {
     LaunchedEffect(true) {
-        vm.getAlbumsDb(navController.currentBackStackEntry?.arguments?.getString("userId")?.toInt())
+        vm.getPhotosDb(
+            navController.currentBackStackEntry?.arguments?.getString("albumId")?.toInt()
+        )
     }
-    val albumsUiState by vm.uiState.collectAsState()
+    val photosUiState by vm.uiState.collectAsState()
+
     Box {
         LazyColumn {
-            items(albumsUiState.albums.size)
-            { album ->
-                albumsUiState.albums[album]?.let { AlbumsCardView(it, vm, navController) }
+            items(photosUiState.photos.size)
+            { photo ->
+                photosUiState.photos[photo]?.let { PhotoCardView(it, vm) }
             }
         }
     }
@@ -43,7 +48,7 @@ fun AlbumsScreen(vm: AlbumsViewModel = viewModel(), navController: NavController
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AlbumsCardView(album: Album, vm: AlbumsViewModel, navController: NavController) {
+fun PhotoCardView(photo: Photo, vm: PhotosViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,11 +58,9 @@ fun AlbumsCardView(album: Album, vm: AlbumsViewModel, navController: NavControll
             .background(color = Color.LightGray, shape = RoundedCornerShape(size = 8.dp))
             .combinedClickable(
                 onLongClick = {
-                    vm.deleteAlbumDb(album.id)
+                    vm.deletePhotoDb(photo.id)
                 },
-                onClick = {
-                    navController.navigate(PHOTOS_SCREEN_WITHOUT_ARG_ROUTE + album.id)
-                })
+                onClick = {})
 
     ) {
         ConstraintLayout(
@@ -65,13 +68,24 @@ fun AlbumsCardView(album: Album, vm: AlbumsViewModel, navController: NavControll
                 .fillMaxWidth()
                 .padding(20.dp, 8.dp, 20.dp, 8.dp)
         ) {
-            val (text) = createRefs()
+            val (image, text) = createRefs()
+            Image(
+                painter = rememberAsyncImagePainter(photo.url),
+                contentDescription = "Image",
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.constrainAs(image) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
+                .fillMaxWidth()
+            )
             Text(
-                text = album.title ?: "",
+                text = photo.title ?: "",
                 fontSize = 20.sp,
                 modifier = Modifier.constrainAs(text) {
                     start.linkTo(parent.start)
-                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
             )

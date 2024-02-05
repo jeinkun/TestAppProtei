@@ -42,12 +42,16 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental",  "true")
     }
 }
 
@@ -60,6 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -74,6 +79,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("androidx.room:room-runtime:2.6.1")
-//    ksp("androidx.room:room-compiler:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
 }

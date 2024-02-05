@@ -6,4 +6,6 @@ class ApiRepository() {
     suspend fun getUsers() = retrofit.apiService.getUsers()
 
     suspend fun getUserAlbums(userId: Int) = retrofit.apiService.getUserAlbums(userId)
+
+    suspend fun getAlbumsPhoto(albumId: Int) = retrofit.apiService.getAlbumsPhoto(albumId)
 }

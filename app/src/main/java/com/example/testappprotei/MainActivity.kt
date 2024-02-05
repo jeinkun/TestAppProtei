@@ -8,12 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.testappprotei.dataBase.Dependencies
 import com.example.testappprotei.presentation.navigation.BaseNavGraph
 import com.example.testappprotei.ui.theme.TestAppProteiTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Dependencies.init(applicationContext)
         setContent {
 
             val navController = rememberNavController()
