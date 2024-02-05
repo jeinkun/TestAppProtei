@@ -1,5 +1,6 @@
 package com.example.testappprotei.presentation.photos
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.testappprotei.dataBase.Dependencies
 import com.example.testappprotei.dataBase.model.PhotosEntity
@@ -63,7 +64,8 @@ class PhotosViewModel : BaseViewModel() {
 
     fun deletePhotoDb(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            photosRepo.removePhotosDataById(id)
+            val dd = photosRepo.removePhotosDataById(id)
+            Log.d("11111111111111111111111111", dd.toString())
             _uiState.value = _uiState.value.copy(photos = _uiState.value.photos.filter { photo -> photo?.id != id })
         }
     }

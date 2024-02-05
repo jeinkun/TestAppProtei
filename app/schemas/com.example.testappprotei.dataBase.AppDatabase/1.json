@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0be4dc20acc04af4a618331cd65590aa",
+    "identityHash": "4381bde88f13ce854d2d7bf6b83fee46",
     "entities": [
       {
         "tableName": "users",
@@ -110,7 +110,7 @@
       },
       {
         "tableName": "albums",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `title` TEXT, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `title` TEXT, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `users`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "userId",
@@ -147,7 +147,7 @@
         "foreignKeys": [
           {
             "table": "users",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "userId"
@@ -160,7 +160,7 @@
       },
       {
         "tableName": "photos",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`albumId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `title` TEXT, `url` TEXT, `thumbnailUrl` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`albumId`) REFERENCES `albums`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`albumId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `title` TEXT, `url` TEXT, `thumbnailUrl` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`albumId`) REFERENCES `albums`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "albumId",
@@ -203,7 +203,7 @@
         "foreignKeys": [
           {
             "table": "albums",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "albumId"
@@ -218,7 +218,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0be4dc20acc04af4a618331cd65590aa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4381bde88f13ce854d2d7bf6b83fee46')"
     ]
   }
 }

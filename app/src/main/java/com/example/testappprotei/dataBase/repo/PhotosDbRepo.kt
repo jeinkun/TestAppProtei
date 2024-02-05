@@ -12,7 +12,7 @@ class PhotosDbRepo (private val photosDao: PhotosDao) {
 
     suspend fun getAllPhotosData(albumsId: Int): List<PhotosTuple> = photosDao.getAllPhotosData(albumsId)
 
-    suspend fun removePhotosDataById(id: Int) {
-        photosDao.deletePhotosDataById(id)
+    suspend fun removePhotosDataById(id: Int) : Int {
+        return photosDao.deletePhotosDataById(id)
     }
 }

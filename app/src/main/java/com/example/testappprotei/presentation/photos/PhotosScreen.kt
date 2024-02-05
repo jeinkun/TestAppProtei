@@ -25,11 +25,13 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun PhotosScreen(vm: PhotosViewModel = viewModel(), navController: NavController) {
     LaunchedEffect(true) {
+        val dd = navController.currentBackStackEntry?.arguments?.getString("albumId")?.toInt()
         vm.getPhotosDb(
             navController.currentBackStackEntry?.arguments?.getString("albumId")?.toInt()
         )
@@ -66,28 +68,30 @@ fun PhotoCardView(photo: Photo, vm: PhotosViewModel) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp, 8.dp, 20.dp, 8.dp)
         ) {
             val (image, text) = createRefs()
-            Image(
-                painter = rememberAsyncImagePainter(photo.url),
+            AsyncImage(
+                model = photo.url,
                 contentDescription = "Image",
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.constrainAs(image) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-                .fillMaxWidth()
+                modifier = Modifier
+                    .constrainAs(image) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+                    .fillMaxWidth()
             )
             Text(
                 text = photo.title ?: "",
                 fontSize = 20.sp,
-                modifier = Modifier.constrainAs(text) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+                modifier = Modifier
+                    .constrainAs(text) {
+                        start.linkTo(parent.start)
+                        top.linkTo(image.bottom)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(20.dp, 8.dp, 20.dp, 8.dp)
             )
         }
     }

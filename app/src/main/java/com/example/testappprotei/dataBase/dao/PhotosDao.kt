@@ -14,6 +14,6 @@ interface PhotosDao {
     @Query("SELECT * FROM photos WHERE albumId = :albumId")
     fun getAllPhotosData(albumId: Int): List<PhotosTuple>
 
-    @Query("DELETE FROM albums WHERE id = :photoId")
-    fun deletePhotosDataById(photoId: Int)
+    @Query("DELETE FROM photos WHERE id = :photoId")
+    fun deletePhotosDataById(photoId: Int) : Int
 }

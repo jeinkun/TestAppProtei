@@ -2,6 +2,7 @@ package com.example.testappprotei.dataBase.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -10,7 +11,8 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = UsersEntity::class,
             parentColumns = ["id"],
-            childColumns = ["userId"]
+            childColumns = ["userId"],
+            onDelete=CASCADE
         )
     ]
 )
