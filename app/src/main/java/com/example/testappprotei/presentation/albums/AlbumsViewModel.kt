@@ -1,5 +1,6 @@
 package com.example.testappprotei.presentation.albums
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.testappprotei.dataBase.Dependencies
 import com.example.testappprotei.dataBase.model.AlbumsEntity
@@ -19,10 +20,12 @@ class AlbumsViewModel : BaseViewModel() {
     val uiState: StateFlow<AlbumsState> = _uiState.asStateFlow()
     private val albumsRepo = Dependencies.albumsDbRepo
 
-    private fun getAlbums(userId: Int?) {
+    fun getAlbums(userId: Int?) {
         if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
+                _uiState.value = _uiState.value.copy(isLoading = true)
                 val response = mainInteractor.getUsersAlbums(userId)
+                _uiState.value = _uiState.value.copy(isLoading = false, isError = false)
                 if (response.isSuccessful) {
                     val result = response.body()
                     result?.let {
@@ -30,12 +33,12 @@ class AlbumsViewModel : BaseViewModel() {
                         insertAlbumsDb(it.toAlbumsEntity())
                     }
                 } else {
-                    // TODO: add error state
+                    _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
                 }
             }
 
         } else {
-            // TODO: add error state
+            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 
@@ -48,24 +51,35 @@ class AlbumsViewModel : BaseViewModel() {
     fun getAlbumsDb(id: Int?) {
         if (id != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                _uiState.value.isLoading = true
+                _uiState.value = _uiState.value.copy(isLoading = true)
                 val albums = albumsRepo.getAllAlbumsData(id)
                 if (albums.isNotEmpty()) {
                     _uiState.value =
-                        _uiState.value.copy(albums = albums.toAlbumsStateDb(), isLoading = false)
+                        _uiState.value.copy(albums = albums.toAlbumsStateDb(), isLoading = false, isError = false)
                 } else {
                     getAlbums(id)
                 }
             }
         } else {
-            // TODO add error
+            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 
     fun deleteAlbumDb(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             albumsRepo.removeAlbumsDataById(id)
-            _uiState.value = _uiState.value.copy(albums = _uiState.value.albums.filter { album -> album?.id != id })
+            _uiState.value =
+                _uiState.value.copy(albums = _uiState.value.albums.filter { album -> album?.id != id })
+        }
+    }
+
+    fun updateFavoriteAlbum(isFavorite: Boolean, idAlbum: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            albumsRepo.updateFavoriteAlbum(isFavorite, idAlbum)
+            _uiState.value =
+                _uiState.value.copy(albums = _uiState.value.albums.map {
+                    if (it?.id == idAlbum) it.copy(favorite = isFavorite) else it
+                })
         }
     }
 

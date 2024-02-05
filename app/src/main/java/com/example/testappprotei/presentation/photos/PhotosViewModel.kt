@@ -18,23 +18,25 @@ class PhotosViewModel : BaseViewModel() {
     val uiState: StateFlow<PhotosState> = _uiState.asStateFlow()
     private val photosRepo = Dependencies.photosDbRepo
 
-    private fun getPhotos(albumsId: Int?) {
+    fun getPhotos(albumsId: Int?) {
         if (albumsId != null) {
             viewModelScope.launch(Dispatchers.IO) {
+                _uiState.value = _uiState.value.copy(isLoading = true)
                 val response = mainInteractor.getAlbumsPhoto(albumsId)
                 if (response.isSuccessful) {
                     val result = response.body()
+                    _uiState.value = _uiState.value.copy(isLoading = false, isError = false)
                     result?.let {
                         _uiState.value = _uiState.value.copy(photos = it.toPhotosState())
                         insertPhotosDb(it.toPhotosEntity())
                     }
                 } else {
-                    // TODO: add error state
+                    _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
                 }
             }
 
         } else {
-            // TODO: add error state
+            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 
@@ -47,17 +49,17 @@ class PhotosViewModel : BaseViewModel() {
     fun getPhotosDb(id: Int?) {
         if (id != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                _uiState.value.isLoading = true
+                _uiState.value = _uiState.value.copy(isLoading = true)
                 val photos = photosRepo.getAllPhotosData(id)
                 if (photos.isNotEmpty()) {
                     _uiState.value =
-                        _uiState.value.copy(photos = photos.toPhotosStateDb(), isLoading = false)
+                        _uiState.value.copy(photos = photos.toPhotosStateDb(), isLoading = false, isError = false)
                 } else {
                     getPhotos(id)
                 }
             }
         } else {
-            // TODO add error
+            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 

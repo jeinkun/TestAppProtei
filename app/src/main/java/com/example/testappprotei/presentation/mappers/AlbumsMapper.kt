@@ -8,13 +8,15 @@ import com.example.testappprotei.presentation.albums.Album
 
 
 fun List<AlbumsModel>.toAlbumsState(): List<Album?> = this.map { album ->
-    Album(id = album.id, title = album.title)
+    Album(id = album.id, userId = album.userId, title = album.title)
 }
 
 fun List<AlbumsTuple>.toAlbumsStateDb(): List<Album> = this.map { album ->
     Album(
         id = album.id,
-        title = album.title
+        userId = album.id,
+        title = album.title,
+        favorite = album.favorite
     )
 }
 
@@ -26,3 +28,11 @@ fun List<AlbumsModel>.toAlbumsEntity(): List<AlbumsEntity> = this.map { album ->
         favorite = false
     )
 }
+
+fun Album.toAlbumEntity(): AlbumsEntity =
+    AlbumsEntity(
+        userId = this.userId,
+        id = this.id,
+        title = this.title,
+        favorite = this.favorite
+    )

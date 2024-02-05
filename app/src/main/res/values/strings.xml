@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TestAppProtei</string>
+
+    <string name="toolbar_title_users">Users</string>
+    <string name="toolbar_title_albums">Albums</string>
+    <string name="toolbar_title_photos">Photos</string>
+    <string name="error_info">Что-то пошло не так, попробуйте позже</string>
 </resources>

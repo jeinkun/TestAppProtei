@@ -4,7 +4,8 @@ import androidx.compose.runtime.mutableStateListOf
 
 data class PhotosState (
     val photos: List<Photo?> = mutableStateListOf(null),
-    var isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isError: Boolean = false
 )
 
 data class Photo (

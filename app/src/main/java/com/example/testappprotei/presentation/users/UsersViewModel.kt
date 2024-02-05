@@ -23,19 +23,18 @@ class UsersViewModel : BaseViewModel() {
         getUsersDb()
     }
 
-    private fun getUsers() {
+    fun getUsers() {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value.isLoading = true
+            _uiState.value = _uiState.value.copy(isLoading = true)
             val response = mainInteractor.getUsers()
-            _uiState.value.isLoading = false
             if (response.isSuccessful) {
                 val result = response.body()
                 result?.let {
-                    _uiState.value = _uiState.value.copy(users = it.toUsersState())
+                    _uiState.value = _uiState.value.copy(users = it.toUsersState(), isLoading = false, isError = false)
                     insertUsersDb(it.toUsersEntity())
                 }
             } else {
-                // TODO: add error state
+                _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
             }
         }
     }
@@ -48,7 +47,7 @@ class UsersViewModel : BaseViewModel() {
 
     private fun getUsersDb() {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value.isLoading = true
+            _uiState.value = _uiState.value.copy(isLoading = true)
             val users = userRepo.getAllUsersData()
             if (users.isNotEmpty()) {
                 _uiState.value = _uiState.value.copy(users = users.toUsersStateDb(), isLoading = false)

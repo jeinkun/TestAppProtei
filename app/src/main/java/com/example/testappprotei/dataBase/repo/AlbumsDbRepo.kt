@@ -15,4 +15,8 @@ class AlbumsDbRepo(private val albumsDao: AlbumsDao) {
     suspend fun removeAlbumsDataById(id: Int) {
         albumsDao.deleteAlbumsDataById(id)
     }
+
+    suspend fun updateFavoriteAlbum(isFavorite: Boolean, idAlbum: Int): Int {
+       return albumsDao.updateFavoriteAlbum(isFavorite, idAlbum)
+    }
 }
