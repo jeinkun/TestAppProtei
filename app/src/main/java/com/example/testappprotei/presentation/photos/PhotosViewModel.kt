@@ -1,9 +1,10 @@
 package com.example.testappprotei.presentation.photos
 
 import androidx.lifecycle.viewModelScope
-import com.example.testappprotei.dataBase.Dependencies
-import com.example.testappprotei.dataBase.model.PhotosEntity
+import com.example.testappprotei.repository.dataBase.Dependencies
+import com.example.testappprotei.repository.dataBase.model.PhotosEntity
 import com.example.testappprotei.presentation.BaseViewModel
+import com.example.testappprotei.presentation.mappers.toAlbumsStateDb
 import com.example.testappprotei.presentation.mappers.toPhotosEntity
 import com.example.testappprotei.presentation.mappers.toPhotosState
 import com.example.testappprotei.presentation.mappers.toPhotosStateDb
@@ -21,6 +22,19 @@ class PhotosViewModel : BaseViewModel() {
     fun getPhotos(albumsId: Int?) {
         if (albumsId != null) {
             viewModelScope.launch(Dispatchers.IO) {
+                photosRepo.getAllPhotosData(albumsId).collect {
+                    _uiState.value = _uiState.value.copy(photos = it.toPhotosStateDb())
+                }
+            }
+
+        } else {
+            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
+        }
+    }
+
+    fun getPhotosUpdate(albumsId: Int?) {
+        if (albumsId != null) {
+            viewModelScope.launch{
                 _uiState.value = _uiState.value.copy(isLoading = true)
                 val response = mainInteractor.getAlbumsPhoto(albumsId)
                 if (response.isSuccessful) {
@@ -34,37 +48,19 @@ class PhotosViewModel : BaseViewModel() {
                     _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
                 }
             }
-
         } else {
             _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 
-    private fun insertPhotosDb(photos: List<PhotosEntity>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            photosRepo.insertNewPhotosData(photos)
-        }
-    }
-
-    fun getPhotosDb(id: Int?) {
-        if (id != null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                _uiState.value = _uiState.value.copy(isLoading = true)
-                val photos = photosRepo.getAllPhotosData(id)
-                if (photos.isNotEmpty()) {
-                    _uiState.value =
-                        _uiState.value.copy(photos = photos.toPhotosStateDb(), isLoading = false, isError = false)
-                } else {
-                    getPhotos(id)
-                }
-            }
-        } else {
-            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
+    private fun insertPhotosDb(data: List<PhotosEntity>) {
+        viewModelScope.launch {
+            photosRepo.insertNewPhotosData(data)
         }
     }
 
     fun deletePhotoDb(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             photosRepo.removePhotosDataById(id)
             _uiState.value = _uiState.value.copy(photos = _uiState.value.photos.filter { photo -> photo?.id != id })
         }

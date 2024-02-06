@@ -1,14 +1,14 @@
 package com.example.testappprotei.presentation.mappers
 
-import com.example.testappprotei.dataBase.model.AddressEntity
-import com.example.testappprotei.dataBase.model.CompanyEntity
-import com.example.testappprotei.dataBase.model.GeoEntity
-import com.example.testappprotei.dataBase.model.UsersEntity
-import com.example.testappprotei.dataBase.model.UsersTuple
-import com.example.testappprotei.network.model.AddressModel
-import com.example.testappprotei.network.model.CompanyModel
-import com.example.testappprotei.network.model.GeoModel
-import com.example.testappprotei.network.model.UserModel
+import com.example.testappprotei.repository.dataBase.model.AddressEntity
+import com.example.testappprotei.repository.dataBase.model.CompanyEntity
+import com.example.testappprotei.repository.dataBase.model.GeoEntity
+import com.example.testappprotei.repository.dataBase.model.UsersEntity
+import com.example.testappprotei.repository.dataBase.model.UsersTuple
+import com.example.testappprotei.repository.network.model.AddressModel
+import com.example.testappprotei.repository.network.model.CompanyModel
+import com.example.testappprotei.repository.network.model.GeoModel
+import com.example.testappprotei.repository.network.model.UserModel
 import com.example.testappprotei.presentation.users.User
 
 

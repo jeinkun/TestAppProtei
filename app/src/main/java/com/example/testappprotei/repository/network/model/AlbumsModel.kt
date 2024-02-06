@@ -1,4 +1,4 @@
-package com.example.testappprotei.network.model
+package com.example.testappprotei.repository.network.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

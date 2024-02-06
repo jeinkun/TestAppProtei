@@ -1,10 +1,10 @@
-package com.example.testappprotei.dataBase
+package com.example.testappprotei.repository.dataBase
 
 import android.content.Context
 import androidx.room.Room
-import com.example.testappprotei.dataBase.repo.AlbumsDbRepo
-import com.example.testappprotei.dataBase.repo.PhotosDbRepo
-import com.example.testappprotei.dataBase.repo.UsersDbRepo
+import com.example.testappprotei.repository.dataBase.repo.AlbumsDbRepo
+import com.example.testappprotei.repository.dataBase.repo.PhotosDbRepo
+import com.example.testappprotei.repository.dataBase.repo.UsersDbRepo
 
 object Dependencies {
 

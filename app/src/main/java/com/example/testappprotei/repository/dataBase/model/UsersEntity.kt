@@ -1,9 +1,9 @@
-package com.example.testappprotei.dataBase.model
+package com.example.testappprotei.repository.dataBase.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.testappprotei.network.model.AddressModel
+import com.example.testappprotei.repository.network.model.AddressModel
 
 @Entity(tableName = "users")
 data class UsersEntity(

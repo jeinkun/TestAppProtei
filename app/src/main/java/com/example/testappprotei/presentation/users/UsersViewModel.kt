@@ -1,8 +1,8 @@
 package com.example.testappprotei.presentation.users
 
 import androidx.lifecycle.viewModelScope
-import com.example.testappprotei.dataBase.Dependencies
-import com.example.testappprotei.dataBase.model.UsersEntity
+import com.example.testappprotei.repository.dataBase.Dependencies
+import com.example.testappprotei.repository.dataBase.model.UsersEntity
 import com.example.testappprotei.presentation.BaseViewModel
 import com.example.testappprotei.presentation.mappers.toUsersEntity
 import com.example.testappprotei.presentation.mappers.toUsersState
@@ -20,7 +20,11 @@ class UsersViewModel : BaseViewModel() {
     private val userRepo = Dependencies.usersDbRepo
 
     init {
-        getUsersDb()
+        viewModelScope.launch {
+            userRepo.getAllUsersData().collect {
+                _uiState.value = _uiState.value.copy(users = it.toUsersStateDb())
+            }
+        }
     }
 
     fun getUsers() {
@@ -46,19 +50,14 @@ class UsersViewModel : BaseViewModel() {
     }
 
     private fun getUsersDb() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
-            val users = userRepo.getAllUsersData()
-            if (users.isNotEmpty()) {
-                _uiState.value = _uiState.value.copy(users = users.toUsersStateDb(), isLoading = false)
-            } else {
-                getUsers()
-            }
+            userRepo.getAllUsersData()
         }
     }
 
     fun deleteUserDb(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             userRepo.removeUsersDataById(id)
             _uiState.value = _uiState.value.copy(users = _uiState.value.users.filter { user -> user?.id != id })
         }

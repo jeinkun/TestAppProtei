@@ -2,12 +2,14 @@ package com.example.testappprotei.presentation.albums
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.example.testappprotei.dataBase.Dependencies
-import com.example.testappprotei.dataBase.model.AlbumsEntity
+import com.example.testappprotei.repository.dataBase.Dependencies
+import com.example.testappprotei.repository.dataBase.model.AlbumsEntity
 import com.example.testappprotei.presentation.BaseViewModel
 import com.example.testappprotei.presentation.mappers.toAlbumsEntity
 import com.example.testappprotei.presentation.mappers.toAlbumsState
 import com.example.testappprotei.presentation.mappers.toAlbumsStateDb
+import com.example.testappprotei.presentation.mappers.toUsersStateDb
+import com.example.testappprotei.repository.dataBase.model.PhotosEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,14 +19,27 @@ import kotlinx.coroutines.launch
 class AlbumsViewModel : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(AlbumsState())
-    val uiState: StateFlow<AlbumsState> = _uiState.asStateFlow()
+    val uiState: StateFlow<AlbumsState> = _uiState
     private val albumsRepo = Dependencies.albumsDbRepo
 
     fun getAlbums(userId: Int?) {
-        if (userId != null) {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            if (userId != null) {
+                albumsRepo.getAllAlbumsData(userId).collect {
+                    _uiState.value = _uiState.value.copy(albums = it.toAlbumsStateDb())
+                }
+            } else {
+                _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
+            }
+        }
+    }
+
+    fun getAlbumsUpdate(id: Int?) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            if (id != null) {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                val response = mainInteractor.getUsersAlbums(userId)
+                val response = mainInteractor.getUsersAlbums(id)
                 _uiState.value = _uiState.value.copy(isLoading = false, isError = false)
                 if (response.isSuccessful) {
                     val result = response.body()
@@ -35,33 +50,11 @@ class AlbumsViewModel : BaseViewModel() {
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
                 }
+            } else {
+
+                _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
             }
 
-        } else {
-            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
-        }
-    }
-
-    private fun insertAlbumsDb(albums: List<AlbumsEntity>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            albumsRepo.insertNewAlbumsData(albums)
-        }
-    }
-
-    fun getAlbumsDb(id: Int?) {
-        if (id != null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                _uiState.value = _uiState.value.copy(isLoading = true)
-                val albums = albumsRepo.getAllAlbumsData(id)
-                if (albums.isNotEmpty()) {
-                    _uiState.value =
-                        _uiState.value.copy(albums = albums.toAlbumsStateDb(), isLoading = false, isError = false)
-                } else {
-                    getAlbums(id)
-                }
-            }
-        } else {
-            _uiState.value = _uiState.value.copy(isLoading = false, isError = true)
         }
     }
 
@@ -73,13 +66,18 @@ class AlbumsViewModel : BaseViewModel() {
         }
     }
 
+    private fun insertAlbumsDb(data: List<AlbumsEntity>) {
+        viewModelScope.launch {
+            albumsRepo.insertNewAlbumsData(data)
+        }
+    }
+
     fun updateFavoriteAlbum(isFavorite: Boolean, idAlbum: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             albumsRepo.updateFavoriteAlbum(isFavorite, idAlbum)
-            _uiState.value =
-                _uiState.value.copy(albums = _uiState.value.albums.map {
-                    if (it?.id == idAlbum) it.copy(favorite = isFavorite) else it
-                })
+            _uiState.value = _uiState.value.copy(albums = _uiState.value.albums.map {
+                if (it?.id == idAlbum) it.copy(favorite = isFavorite) else it
+            })
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.testappprotei.dataBase.model
+package com.example.testappprotei.repository.dataBase.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

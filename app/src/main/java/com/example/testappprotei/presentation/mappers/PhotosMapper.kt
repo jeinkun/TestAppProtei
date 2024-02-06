@@ -1,8 +1,8 @@
 package com.example.testappprotei.presentation.mappers
 
-import com.example.testappprotei.dataBase.model.PhotosEntity
-import com.example.testappprotei.dataBase.model.PhotosTuple
-import com.example.testappprotei.network.model.PhotosModel
+import com.example.testappprotei.repository.dataBase.model.PhotosEntity
+import com.example.testappprotei.repository.dataBase.model.PhotosTuple
+import com.example.testappprotei.repository.network.model.PhotosModel
 import com.example.testappprotei.presentation.photos.Photo
 
 fun List<PhotosModel>.toPhotosState(): List<Photo?> = this.map { photo ->

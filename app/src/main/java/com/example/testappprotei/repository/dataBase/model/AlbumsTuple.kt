@@ -1,4 +1,4 @@
-package com.example.testappprotei.dataBase.model
+package com.example.testappprotei.repository.dataBase.model
 
 data class AlbumsTuple(
     val userId: Int,

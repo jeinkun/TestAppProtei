@@ -1,4 +1,4 @@
-package com.example.testappprotei.network
+package com.example.testappprotei.repository.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

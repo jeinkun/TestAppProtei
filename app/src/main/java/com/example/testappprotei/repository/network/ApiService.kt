@@ -1,8 +1,8 @@
-package com.example.testappprotei.network
+package com.example.testappprotei.repository.network
 
-import com.example.testappprotei.network.model.AlbumsModel
-import com.example.testappprotei.network.model.PhotosModel
-import com.example.testappprotei.network.model.UserModel
+import com.example.testappprotei.repository.network.model.AlbumsModel
+import com.example.testappprotei.repository.network.model.PhotosModel
+import com.example.testappprotei.repository.network.model.UserModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

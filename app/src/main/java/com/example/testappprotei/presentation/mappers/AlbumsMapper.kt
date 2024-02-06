@@ -1,9 +1,9 @@
 package com.example.testappprotei.presentation.mappers
 
 import androidx.compose.runtime.mutableStateListOf
-import com.example.testappprotei.dataBase.model.AlbumsEntity
-import com.example.testappprotei.dataBase.model.AlbumsTuple
-import com.example.testappprotei.network.model.AlbumsModel
+import com.example.testappprotei.repository.dataBase.model.AlbumsEntity
+import com.example.testappprotei.repository.dataBase.model.AlbumsTuple
+import com.example.testappprotei.repository.network.model.AlbumsModel
 import com.example.testappprotei.presentation.albums.Album
 
 

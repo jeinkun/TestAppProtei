@@ -1,4 +1,4 @@
-package com.example.testappprotei.presentation
+package com.example.testappprotei.presentation.commonViews
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
